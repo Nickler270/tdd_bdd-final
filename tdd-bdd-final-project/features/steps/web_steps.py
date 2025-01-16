@@ -28,4 +28,3 @@ def step_impl(context, message):
         )
     )
     assert(found)
-
