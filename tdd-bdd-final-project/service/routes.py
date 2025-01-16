@@ -1,3 +1,5 @@
+#features/service/routes.py
+
 ######################################################################
 # READ A PRODUCT
 ######################################################################
@@ -70,7 +72,7 @@ def list_products():
     results = [product.serialize() for product in products]
     app.logger.info("[%s] Products returned", len(results))
     return results, status.HTTP_200_OK
-      
+
 ######################################################################
 # LIST PRODUCTS
 ######################################################################
@@ -100,28 +102,22 @@ def list_products():
 def list_products():
     """Returns a list of Products"""
     app.logger.info("Request to list Products...")
+    filters = {
+        "name": request.args.get("name"),
+        "category": request.args.get("category"),
+        "available": request.args.get("available"),
+    }
 
-    products = []
-    name = request.args.get("name")
-    category = request.args.get("category")
-    available = request.args.get("available")
-
-    if name:
-        app.logger.info("Find by name: %s", name)
-        products = Product.find_by_name(name)
-    elif category:
-        app.logger.info("Find by category: %s", category)
-        # create enum from string
-        category_value = getattr(Category, category.upper())
-        products = Product.find_by_category(category_value)
-    elif available:
-        app.logger.info("Find by available: %s", available)
-        # create bool from string
-        available_value = available.lower() in ["true", "yes", "1"]
+    products = Product.all()
+    if filters["name"]:
+        products = Product.find_by_name(filters["name"])
+    elif filters["category"]:
+        category_value = getattr(Category, filters["category"].upper(), None)
+        if category_value:
+            products = Product.find_by_category(category_value)
+    elif filters["available"]:
+        available_value = filters["available"].lower() in ["true", "yes", "1"]
         products = Product.find_by_availability(available_value)
-    else:
-        app.logger.info("Find all")
-        products = Product.all()
 
     results = [product.serialize() for product in products]
     app.logger.info("[%s] Products returned", len(results))

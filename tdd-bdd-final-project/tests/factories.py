@@ -1,3 +1,4 @@
+#features/tests/factories.py
 class ProductFactory(factory.Factory):
     """Creates fake products for testing"""
 

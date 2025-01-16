@@ -1,3 +1,5 @@
+#features/steps/load_steps.py
+def load_payload(context, rest_endpoint):
     for row in context.table:
         payload = {
             "name": row['name'],

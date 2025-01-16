@@ -1,3 +1,4 @@
+#features/tests/test_routes.py
 def test_get_product(self):
     """It should Get a single Product"""
     # get the id of a product
@@ -100,5 +101,3 @@ def test_query_by_availability(self):
     # check the data just to be sure
     for product in data:
         self.assertEqual(product["available"], True)
-
-
